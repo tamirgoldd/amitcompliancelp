@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Darrow — Privacy Radar Pricing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0E052E;
+    --navy-raised:#170D44;
+    --navy-raised-2:#1D133D;
+    --surface-card:#150B38;
+    --purple-bright:#9874ED;
+    --purple-200:#C6B2F5;
+    --purple-100:#CFC7F4;
+    --eggplant:#5F2BD8;
+    --purple-700:#634B9F;
+    --white:#FFFFFF;
+    --silver:#BFBFC4;
+    --gray-400:#5C586A;
+    --cream:#FBFAF8;
+    --beige:#D4D0C5;
+    --oatmeal:#F2EDE6;
+    --maxw:1240px;
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{
+    font-family:'Poppins',sans-serif;
+    background:var(--navy);
+    color:var(--white);
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  /* Atmospheric background */
+  .bg-field{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .glow{position:absolute;border-radius:50%;filter:blur(120px);opacity:.55}
+  .glow.one{width:780px;height:780px;top:-340px;left:50%;transform:translateX(-50%);
+    background:radial-gradient(circle,rgba(152,116,237,.42),rgba(95,43,216,.12) 55%,transparent 72%)}
+  .glow.two{width:560px;height:560px;bottom:-280px;left:-180px;
+    background:radial-gradient(circle,rgba(99,75,159,.30),transparent 70%)}
+  .glow.three{width:500px;height:500px;bottom:-200px;right:-160px;
+    background:radial-gradient(circle,rgba(152,116,237,.22),transparent 70%)}
+  .grain{position:absolute;inset:0;opacity:.05;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+  /* Radar rings — static, ambient backdrop (no motion) */
+  .radar{position:absolute;top:50%;left:50%;width:1320px;height:1320px;
+    transform:translate(-50%,-50%)}
+  .radar-rings{position:absolute;inset:0;width:100%;height:100%;opacity:.15}
+  .radar-rings circle{fill:none;stroke:url(#ringgrad);stroke-width:1}
+
+  .wrap{position:relative;z-index:1;max-width:var(--maxw);margin:0 auto;padding:0 40px}
+
+  /* ---------- NAV ---------- */
+  nav{position:relative;z-index:3;display:flex;align-items:center;justify-content:space-between;
+    max-width:var(--maxw);margin:0 auto;padding:26px 40px 0}
+  .brand-logo{height:26px;width:auto;display:block}
+  .navlinks{display:flex;gap:34px;align-items:center}
+  .navlinks a{color:var(--silver);text-decoration:none;font-size:14.5px;font-weight:400;
+    transition:color .25s var(--ease)}
+  .navlinks a:hover{color:var(--white)}
+  .nav-cta{border:1px solid rgba(198,178,245,.28);border-radius:100px;padding:11px 22px !important;
+    color:var(--white)!important;font-weight:500;font-size:14px;transition:all .3s var(--ease)}
+  .nav-cta:hover{background:var(--purple-bright);border-color:var(--purple-bright);
+    box-shadow:0 8px 30px -8px rgba(152,116,237,.6)}
+
+  /* ---------- HERO ---------- */
+  header{position:relative;z-index:1;text-align:center;
+    min-height:calc(100vh - 80px);display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:60px 0 56px}
+  h1{font-size:clamp(46px,7.4vw,88px);font-weight:600;line-height:1.03;letter-spacing:-.03em;
+    max-width:16ch;margin:0 auto;word-spacing:.04em}
+  h1 .em{font-family:'Playfair Display',serif;font-style:italic;font-weight:500;color:var(--purple-200)}
+  .sub{max-width:60ch;margin:34px auto 0;color:var(--silver);font-size:19px;font-weight:300;line-height:1.65}
+  .sub .sub-line{display:inline-block;margin-top:8px;color:var(--white);font-weight:400}
+  .ttfv{display:inline-flex;align-items:center;gap:11px;margin-top:34px;font-size:14px;color:var(--silver);font-weight:300;flex-wrap:wrap;justify-content:center}
+  .ttfv b{color:var(--white);font-weight:500}
+  .ttfv .pip{width:5px;height:5px;border-radius:50%;background:var(--purple-bright)}
+  .scroll-hint{margin-top:54px;display:inline-flex;flex-direction:column;align-items:center;gap:10px;
+    color:var(--gray-400);font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;text-decoration:none}
+  .scroll-hint:hover{color:var(--purple-200)}
+  .scroll-hint svg{width:18px;height:18px;stroke:var(--purple-200);fill:none;stroke-width:1.6;
+    animation:bob 2.2s var(--ease) infinite}
+  @keyframes bob{0%,100%{transform:translateY(0);opacity:.6}50%{transform:translateY(5px);opacity:1}}
+
+  /* ---------- TRUSTED-BY RIBBON ---------- */
+  .trusted{position:relative;z-index:1;margin-top:46px;padding:42px 0 6px;
+    border-top:1px solid rgba(198,178,245,.1)}
+  .trusted .t-label{text-align:center;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--gray-400);font-weight:500;margin-bottom:26px;padding:0 20px}
+  .logos{display:flex;align-items:center;justify-content:center;gap:clamp(28px,6vw,72px);flex-wrap:wrap}
+  .logos .lg{display:flex;align-items:center;gap:10px;color:#9C98B0;font-weight:500;font-size:19px;
+    letter-spacing:-.01em;opacity:.85;transition:opacity .3s var(--ease)}
+  .logos .lg:hover{opacity:1}
+  .logos .badge{width:24px;height:24px;border-radius:5px;display:grid;place-items:center;
+    font-size:12px;font-weight:700;color:#fff}
+  .logos .ms-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;width:22px;height:22px}
+  .logos .ms-grid span{display:block;border-radius:1px}
+  .logos .nfx{font-weight:700;font-style:italic;letter-spacing:-.04em;font-size:22px;color:#9C98B0}
+  .logos .geo{font-family:'Playfair Display',serif;font-style:italic;font-size:21px;font-weight:400;color:#9C98B0}
+
+  /* ---------- PRICING ---------- */
+  .pricing{position:relative;z-index:1;padding:78px 0 30px}
+  .sec-intro{text-align:center;max-width:62ch;margin:0 auto 14px}
+  .sec-intro .eyebrow{font-size:11.5px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--purple-200);margin-bottom:18px}
+  .sec-intro h2{font-size:clamp(30px,4.4vw,46px);font-weight:600;letter-spacing:-.025em;line-height:1.06}
+  .sec-intro p{margin-top:18px;color:var(--silver);font-size:16.5px;font-weight:300;line-height:1.6}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:stretch;margin-top:52px}
+
+  .card{position:relative;display:flex;flex-direction:column;
+    background:linear-gradient(180deg,rgba(29,19,61,.66),rgba(21,11,56,.82));
+    border:1px solid rgba(198,178,245,.12);border-radius:22px;padding:38px 32px 34px;
+    backdrop-filter:blur(8px);transition:transform .5s var(--ease),border-color .5s var(--ease),box-shadow .5s var(--ease)}
+  .card:hover{transform:translateY(-6px);border-color:rgba(198,178,245,.26);
+    box-shadow:0 30px 70px -34px rgba(0,0,0,.8)}
+
+  .card.featured{
+    background:linear-gradient(180deg,rgba(48,34,83,.82),rgba(29,19,61,.92));
+    border:1px solid rgba(152,116,237,.55);
+    box-shadow:0 0 0 1px rgba(152,116,237,.25),0 40px 90px -40px rgba(95,43,216,.65),
+      inset 0 1px 0 rgba(198,178,245,.18);
+    transform:translateY(-14px)}
+  .card.featured:hover{transform:translateY(-20px)}
+  .ribbon{position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+    display:inline-flex;align-items:center;gap:7px;white-space:nowrap;
+    background:linear-gradient(90deg,var(--purple-bright),var(--eggplant));
+    color:var(--white);font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+    padding:8px 18px;border-radius:100px;box-shadow:0 10px 28px -8px rgba(95,43,216,.7)}
+  .ribbon svg{width:13px;height:13px}
+
+  .tier-name{font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--silver)}
+  .card.featured .tier-name{color:var(--purple-200)}
+  .tier-desc{margin-top:14px;color:var(--silver);font-size:14.5px;font-weight:300;line-height:1.55;min-height:46px}
+
+  .price-row{display:flex;align-items:baseline;gap:10px;margin-top:24px;flex-wrap:wrap}
+  .price{font-size:52px;font-weight:600;letter-spacing:-.03em;line-height:1}
+  .card.enterprise .price{font-size:46px}
+  .price .cur{font-size:26px;font-weight:500;vertical-align:top;margin-right:1px}
+  .price-unit{font-size:13px;color:var(--silver);font-weight:300;line-height:1.3}
+  .price-unit b{display:block;color:var(--purple-200);font-weight:500;font-size:12px;
+    letter-spacing:.04em;text-transform:uppercase}
+  .price-note{margin-top:12px;font-size:13px;color:var(--silver);font-weight:300;line-height:1.5;min-height:38px}
+
+  .divider{height:1px;margin:24px 0 22px;
+    background:linear-gradient(90deg,transparent,rgba(198,178,245,.22),transparent)}
+
+  .feat-head{font-size:12.5px;font-weight:600;color:var(--silver);letter-spacing:.06em;
+    text-transform:uppercase;margin-bottom:18px}
+  .feat-head em{font-style:normal;color:var(--purple-200)}
+  ul{list-style:none;display:flex;flex-direction:column;gap:14px;flex-grow:1}
+  li{display:flex;gap:13px;align-items:flex-start;font-size:14.5px;font-weight:300;
+    color:#E8E6F2;line-height:1.45}
+  li .ck{flex:0 0 20px;width:20px;height:20px;margin-top:1px;border-radius:50%;
+    display:grid;place-items:center;background:rgba(152,116,237,.16)}
+  li .ck svg{width:11px;height:11px;stroke:var(--purple-bright);stroke-width:2.4;fill:none}
+  .featured li .ck{background:rgba(152,116,237,.28)}
+  li b{color:var(--white);font-weight:500}
+
+  .cta{margin-top:30px;display:flex;align-items:center;justify-content:center;gap:9px;
+    width:100%;padding:16px 24px;border-radius:13px;font-family:inherit;font-size:15px;font-weight:500;
+    cursor:pointer;text-decoration:none;border:1px solid transparent;transition:all .35s var(--ease)}
+  .cta svg{width:16px;height:16px;transition:transform .35s var(--ease)}
+  .cta:hover svg{transform:translateX(4px)}
+  .cta-secondary{background:rgba(255,255,255,.03);border-color:rgba(198,178,245,.3);color:var(--white)}
+  .cta-secondary:hover{border-color:var(--purple-200);background:rgba(152,116,237,.1)}
+  .cta-primary{background:var(--white);color:var(--navy);font-weight:600}
+  .cta-primary:hover{box-shadow:0 16px 40px -12px rgba(255,255,255,.4);transform:translateY(-2px)}
+  .featured .cta-primary{background:linear-gradient(90deg,var(--purple-bright),var(--eggplant));color:var(--white)}
+  .featured .cta-primary:hover{box-shadow:0 18px 46px -12px rgba(95,43,216,.75);transform:translateY(-2px)}
+
+  .card-foot{margin-top:16px;text-align:center;font-size:13.5px;color:var(--purple-200);font-weight:400}
+
+  /* ---------- TRUST STATS ---------- */
+  .trust{position:relative;z-index:1;margin-top:54px;text-align:center}
+  .trust-label{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gray-400);
+    font-weight:500;margin-bottom:26px}
+  .stats{display:flex;justify-content:center;gap:0;flex-wrap:wrap;
+    border:1px solid rgba(198,178,245,.12);border-radius:18px;overflow:hidden;background:rgba(21,11,56,.5)}
+  .stat{flex:1;min-width:170px;padding:26px 18px;border-right:1px solid rgba(198,178,245,.1)}
+  .stat:last-child{border-right:none}
+  .stat .num{font-size:30px;font-weight:600;letter-spacing:-.02em;color:var(--white)}
+  .stat .num .accent{color:var(--purple-bright)}
+  .stat .lab{margin-top:6px;font-size:12.5px;color:var(--silver);font-weight:300}
+
+  .assurance{position:relative;z-index:1;margin-top:40px;display:flex;gap:34px;justify-content:center;flex-wrap:wrap;padding-bottom:10px}
+  .assurance .item{display:flex;align-items:center;gap:11px;font-size:13.5px;color:var(--silver);font-weight:300}
+  .assurance svg{width:17px;height:17px;stroke:var(--purple-200);fill:none;stroke-width:1.6}
+
+  /* ---------- HOW IT WORKS ---------- */
+  .how{position:relative;z-index:1;padding:96px 0 20px}
+  .how-head{text-align:center;max-width:62ch;margin:0 auto 18px}
+  .how .eyebrow{font-size:11.5px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--purple-200);margin-bottom:18px}
+  .how h2{font-size:clamp(30px,4.4vw,48px);font-weight:600;letter-spacing:-.025em;line-height:1.05}
+  .how h2 .em{font-family:'Playfair Display',serif;font-style:italic;font-weight:500;color:var(--purple-200)}
+  .how .lede{margin-top:20px;color:var(--silver);font-size:17px;font-weight:300;line-height:1.6}
+
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:60px;position:relative}
+  .step{position:relative;background:linear-gradient(180deg,rgba(29,19,61,.62),rgba(21,11,56,.8));
+    border:1px solid rgba(198,178,245,.12);border-radius:20px;padding:30px 26px 32px;
+    transition:transform .5s var(--ease),border-color .5s var(--ease)}
+  .step:hover{transform:translateY(-6px);border-color:rgba(152,116,237,.4)}
+  .step .idx{font-family:'Playfair Display',serif;font-size:15px;font-weight:500;color:var(--purple-bright);letter-spacing:.04em}
+  .step .ic{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;margin:18px 0 20px;
+    background:rgba(152,116,237,.12);border:1px solid rgba(152,116,237,.28)}
+  .step .ic svg{width:23px;height:23px;stroke:var(--purple-200);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .step h3{font-size:18px;font-weight:600;letter-spacing:-.01em;line-height:1.25}
+  .step p{margin-top:11px;color:var(--silver);font-size:14px;font-weight:300;line-height:1.55}
+
+  .blindspot{margin-top:24px;display:grid;grid-template-columns:1.05fr .95fr;gap:0;
+    border:1px solid rgba(198,178,245,.14);border-radius:22px;overflow:hidden;background:rgba(21,11,56,.5)}
+  .blindspot .left{padding:46px 44px;border-right:1px solid rgba(198,178,245,.12)}
+  .blindspot .left h3{font-size:24px;font-weight:600;letter-spacing:-.02em;line-height:1.2}
+  .blindspot .left h3 .em{font-family:'Playfair Display',serif;font-style:italic;font-weight:500;color:var(--purple-200)}
+  .blindspot .left p{margin-top:16px;color:var(--silver);font-size:15px;font-weight:300;line-height:1.6}
+  .blindspot .signals{list-style:none;margin-top:22px;display:flex;flex-direction:column;gap:13px}
+  .blindspot .signals li{display:flex;gap:12px;align-items:flex-start;font-size:14px;color:#E8E6F2;font-weight:300;line-height:1.45}
+  .blindspot .signals .ck{flex:0 0 18px;width:18px;height:18px;margin-top:1px;border-radius:50%;display:grid;place-items:center;background:rgba(152,116,237,.18)}
+  .blindspot .signals .ck svg{width:10px;height:10px;stroke:var(--purple-bright);stroke-width:2.6;fill:none}
+  .blindspot .right{padding:46px 44px;display:flex;flex-direction:column;justify-content:center;
+    background:linear-gradient(160deg,rgba(48,34,83,.5),rgba(21,11,56,.2))}
+  .blindspot .right .quote{font-family:'Playfair Display',serif;font-size:21px;line-height:1.45;font-weight:400;color:var(--white)}
+  .blindspot .right .attr{margin-top:22px;font-size:13px;color:var(--silver);font-weight:400}
+  .blindspot .right .attr span{display:block;color:var(--gray-400);font-weight:300;margin-top:2px}
+  .blindspot .right .mini-stats{display:flex;gap:30px;margin-top:30px;padding-top:26px;border-top:1px solid rgba(198,178,245,.12)}
+  .blindspot .right .ms .n{font-size:24px;font-weight:600;color:var(--purple-bright);letter-spacing:-.02em}
+  .blindspot .right .ms .l{font-size:11.5px;color:var(--silver);font-weight:300;margin-top:3px}
+
+  .how-cta{text-align:center;margin-top:48px}
+  .how-cta a{display:inline-flex;align-items:center;gap:10px;
+    background:linear-gradient(90deg,var(--purple-bright),var(--eggplant));color:#fff;
+    padding:16px 34px;border-radius:13px;font-size:15px;font-weight:500;text-decoration:none;
+    transition:all .35s var(--ease);box-shadow:0 14px 40px -16px rgba(95,43,216,.7)}
+  .how-cta a:hover{transform:translateY(-2px);box-shadow:0 20px 50px -16px rgba(95,43,216,.85)}
+  .how-cta a svg{width:16px;height:16px;transition:transform .35s var(--ease)}
+  .how-cta a:hover svg{transform:translateX(4px)}
+
+  footer{position:relative;z-index:1;margin-top:70px;border-top:1px solid rgba(198,178,245,.1);
+    padding:30px 0 46px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:14px}
+  footer .legal{font-size:12px;color:var(--gray-400);font-weight:300}
+
+  .reveal{opacity:0;transform:translateY(26px)}
+  .in{opacity:1;transform:none;transition:opacity .8s var(--ease),transform .8s var(--ease)}
+
+  /* ===================== RESPONSIVE ===================== */
+  @media(max-width:1100px){
+    .blindspot{grid-template-columns:1fr}
+    .blindspot .left{border-right:none;border-bottom:1px solid rgba(198,178,245,.12)}
+  }
+  @media(max-width:980px){
+    .grid{grid-template-columns:1fr;max-width:460px;margin:46px auto 0;gap:18px}
+    .card.featured,.card.featured:hover{transform:none}
+    .steps{grid-template-columns:repeat(2,1fr)}
+  }
+  @media(max-width:860px){
+    .navlinks .hide-sm{display:none}
+  }
+  @media(max-width:680px){
+    .wrap{padding:0 20px}
+    nav{padding:20px 20px 0}
+    .brand-logo{height:21px}
+    .nav-cta{padding:9px 16px !important;font-size:13px}
+    .navlinks{gap:14px}
+    header{min-height:auto;padding:48px 0 40px}
+    h1{font-size:clamp(38px,11vw,56px);letter-spacing:-.025em;max-width:14ch}
+    .sub{font-size:16px;margin-top:24px}
+    .ttfv{font-size:13px;margin-top:26px;gap:8px}
+    .ttfv span[style]{display:none}
+    .scroll-hint{margin-top:38px}
+    .trusted{padding:8px 0}
+    .logos{gap:24px 30px}
+    .logos .lg{font-size:16px}
+    .logos .nfx{font-size:18px}.logos .geo{font-size:18px}
+    .pricing{padding:54px 0 20px}
+    .sec-intro h2{font-size:27px}
+    .sec-intro p{font-size:15px}
+    .card{padding:32px 24px 30px}
+    .price{font-size:46px}
+    .card.enterprise .price{font-size:40px}
+    .stats{flex-direction:column}
+    .stat{border-right:none;border-bottom:1px solid rgba(198,178,245,.1);min-width:0;width:100%;padding:22px 16px}
+    .stat:last-child{border-bottom:none}
+    .assurance{flex-direction:column;align-items:center;gap:16px;text-align:center}
+    .how{padding:70px 0 10px}
+    .how h2{font-size:28px}
+    .how .lede{font-size:15px}
+    .steps{grid-template-columns:1fr;max-width:420px;margin:42px auto 0;gap:14px}
+    .step{padding:26px 24px 28px}
+    .blindspot .left,.blindspot .right{padding:34px 26px}
+    .blindspot .left h3{font-size:21px}
+    .blindspot .right .quote{font-size:18px}
+    .blindspot .right .mini-stats{gap:20px;flex-wrap:wrap}
+    .how-cta a{width:100%;justify-content:center}
+  }
+  @media(max-width:400px){
+    .blindspot .right .mini-stats .ms{flex:1 1 40%}
+  }
+  @media(hover:none){
+    .card:hover,.card.featured:hover,.step:hover{transform:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-field">
+  <div class="glow one"></div>
+  <div class="glow two"></div>
+  <div class="glow three"></div>
+  <div class="radar" id="radar">
+    <svg class="radar-rings" viewBox="0 0 1100 1100">
+      <defs><linearGradient id="ringgrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#C6B2F5"/><stop offset="1" stop-color="#9874ED" stop-opacity="0"/>
+      </linearGradient></defs>
+      <circle cx="550" cy="550" r="190"/><circle cx="550" cy="550" r="320"/>
+      <circle cx="550" cy="550" r="450"/><circle cx="550" cy="550" r="540"/>
+      <line x1="10" y1="550" x2="1090" y2="550" stroke="url(#ringgrad)" stroke-width="1" opacity=".4"/>
+      <line x1="550" y1="10" x2="550" y2="1090" stroke="url(#ringgrad)" stroke-width="1" opacity=".4"/>
+    </svg>
+  </div>
+  <div class="grain"></div>
+</div>
+
+<nav>
+  <img class="brand-logo" src="data:image/png;base64,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" alt="Darrow">
+  <div class="navlinks">
+    <a href="#how" class="hide-sm">How It Works</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#pricing" class="nav-cta">Request a Scan</a>
+  </div>
+</nav>
+
+<header class="wrap">
+  <h1 class="reveal">See Your Legal Exposure <span class="em">Before</span> Regulators Do.</h1>
+  <p class="sub reveal">Darrow scans your public-facing digital footprint and returns severity-scored, evidence-backed findings — mapped to specific laws, jurisdictions, and enforcement precedents.<br><span class="sub-line">One input: your domain. No integration, no internal access.</span></p>
+  <div class="ttfv reveal"><span class="pip"></span> First findings in <b>under 5 minutes</b><span style="opacity:.4">·</span> <b>195+</b> regulations across <b>11</b> legal domains mapped</div>
+  <a href="#pricing" class="scroll-hint reveal">View Pricing
+    <svg viewBox="0 0 24 24"><path d="M12 5v14m0 0l-6-6m6 6l6-6"/></svg></a>
+</header>
+
+<!-- ============ PRICING ============ -->
+<section class="pricing wrap" id="pricing">
+  <div class="sec-intro reveal">
+    <div class="eyebrow">Pricing</div>
+    <h2>Coverage for Every Organizational Scope.</h2>
+    <p>Choose the coverage level suited to your organizational scope. MACC-eligible billing allows enterprise buyers to deploy existing Azure commitments seamlessly.</p>
+  </div>
+
+  <div class="grid">
+
+    <!-- FREE TRIAL SCAN -->
+    <div class="card reveal">
+      <div class="tier-name">Free Trial Scan</div>
+      <div class="tier-desc">For immediate outside-in discovery of your highest severity exposure risk.</div>
+      <div class="price-row">
+        <div class="price"><span class="cur">$</span>0</div>
+        <div class="price-unit"><b>Free scan</b>1 public web domain</div>
+      </div>
+      <div class="price-note">Run a diagnostic scan on a single domain — no card required.</div>
+      <div class="divider"></div>
+      <div class="feat-head">Included Deliverables</div>
+      <ul>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span><span>1 Partial diagnostic scan report</span></li>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span><span>Coverage for 1 public web domain</span></li>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span><span>High-level findings summary log</span></li>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span><span>Estimated class action exposure ($)</span></li>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span><span>Partial executive vulnerability report</span></li>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span><span>Complete detail on 1 critical finding</span></li>
+      </ul>
+      <a href="#" class="cta cta-secondary">Download Free Report
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg></a>
+      <div class="card-foot">No card required · Self-serve</div>
+    </div>
+
+    <!-- ESSENTIAL SUBSCRIPTION (featured) -->
+    <div class="card featured reveal">
+      <div class="ribbon">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
+        Most Popular
+      </div>
+      <div class="tier-name">Essential Subscription</div>
+      <div class="tier-desc">Continuous, full-detail monitoring on a single domain — the complete picture, always on.</div>
+      <div class="price-row">
+        <div class="price"><span class="cur">$</span>499</div>
+        <div class="price-unit">/ month</div>
+      </div>
+      <div class="price-note">Billed annually on a 12-month term. Save $1,200 annually.</div>
+      <div class="divider"></div>
+      <div class="feat-head">Everything in Free, <em>plus</em></div>
+      <ul>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span><span><b>Weekly scan frequency mapping</b></span></li>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span><span>1 Full, continuous automated report</span></li>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span><span>Complete severity-scored finding details (LVSS)</span></li>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span><span>Captured raw evidence &amp; payload captures</span></li>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span><span>Jurisdictional maps (CCPA, HIPAA, etc.)</span></li>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span><span>Prioritized remediation steps by timeline</span></li>
+      </ul>
+      <a href="#" class="cta cta-primary">Download Report
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg></a>
+      <div class="card-foot">Annual term · Save 20%</div>
+    </div>
+
+    <!-- ENTERPRISE SUITE -->
+    <div class="card enterprise reveal">
+      <div class="tier-name">Enterprise Suite</div>
+      <div class="tier-desc">Complete litigation defense, multi-domain control, and dedicated expert advisory.</div>
+      <div class="price-row">
+        <div class="price">Custom</div>
+        <div class="price-unit"><b>Annual</b>Talk to sales</div>
+      </div>
+      <div class="price-note">Tailored scope, billing, and advisory for large organizations.</div>
+      <div class="divider"></div>
+      <div class="feat-head">Tailored Enterprise Benefits</div>
+      <ul>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span><span><b>Unlimited Litigation Response Package</b></span></li>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span><span>Multi-domain coverage (3+ domains mapped)</span></li>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span><span>Daily or manual custom scan trigger access</span></li>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span><span>Quarterly briefings on emerging enforcement trends</span></li>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span><span>Dedicated Legal Intelligence team reviews</span></li>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span><span>Direct product roadmap advisory seat</span></li>
+      </ul>
+      <a href="#" class="cta cta-secondary">Contact Our Team
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m0 0l-6-6m6 6l-6 6"/></svg></a>
+      <div class="card-foot">MACC-eligible · Available on Azure Marketplace</div>
+    </div>
+
+  </div>
+
+  <div class="trust reveal">
+    <div class="trust-label">The detection engine trusted across the legal ecosystem</div>
+    <div class="stats">
+      <div class="stat"><div class="num"><span class="accent">80%</span></div><div class="lab">of top US trial law firms</div></div>
+      <div class="stat"><div class="num">$22B</div><div class="lab">in legal exposure surfaced</div></div>
+      <div class="stat"><div class="num">195+</div><div class="lab">regulations monitored</div></div>
+      <div class="stat"><div class="num">&lt;5<span style="font-size:18px"> min</span></div><div class="lab">to first findings</div></div>
+    </div>
+  </div>
+
+  <div class="assurance reveal">
+    <div class="item"><svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg> Outside-in. No internal access required.</div>
+    <div class="item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> Evidence-backed &amp; severity-scored.</div>
+    <div class="item"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg> Mapped to real enforcement precedents.</div>
+  </div>
+
+  <!-- TRUSTED-BY RIBBON -->
+  <div class="trusted reveal">
+    <div class="t-label">Built by Darrow — Trusted by Leading Legal Teams and Integrated with Secure Partners</div>
+    <div class="logos">
+      <div class="lg">
+        <span class="ms-grid"><span style="background:#F25022"></span><span style="background:#7FBA00"></span><span style="background:#00A4EF"></span><span style="background:#FFB900"></span></span>
+        <span class="lbl">Microsoft</span>
+      </div>
+      <div class="lg"><span class="badge" style="background:#3b3b46">A</span><span class="lbl">ARMIS</span></div>
+      <div class="lg"><span class="badge" style="background:#F26625">Y</span><span class="lbl">Combinator</span></div>
+      <div class="lg"><span class="nfx">nfx</span></div>
+      <div class="lg"><span class="geo">Georgian</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section class="how wrap" id="how">
+  <div class="how-head reveal">
+    <div class="eyebrow">How It Works</div>
+    <h2>The Legal Attack Surface <span class="em">Your Security Stack</span> Can't See.</h2>
+    <p class="lede">Every tool in your stack points inward. Darrow looks from the outside — the same vantage point regulators and plaintiff firms already use — and turns what they'd find into intelligence you can act on first. No agents to deploy. No data to share.</p>
+  </div>
+
+  <div class="steps">
+    <div class="step reveal">
+      <div class="idx">01</div>
+      <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 12h6m6 0h6"/><circle cx="12" cy="12" r="3"/><path d="M12 3v3m0 12v3"/></svg></div>
+      <h3>Submit One Domain</h3>
+      <p>Enter a public domain name. That's the entire setup — no integration, no credentials, no internal access. Deploy in minutes, not months.</p>
+    </div>
+    <div class="step reveal">
+      <div class="idx">02</div>
+      <div class="ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M11 8v3l2 2"/></svg></div>
+      <h3>Agents Scan Continuously</h3>
+      <p>Autonomous AI agents map your external footprint — trackers, pixels, consent flows, data-sharing — exactly as it appears to the outside world, and keep watching as it changes.</p>
+    </div>
+    <div class="step reveal">
+      <div class="idx">03</div>
+      <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 4v16h16"/><path d="M8 14l3-4 3 2 4-6"/><circle cx="18" cy="6" r="1.4" fill="currentColor" stroke="none"/></svg></div>
+      <h3>Exposure Gets Scored</h3>
+      <p>Every finding is severity-scored, evidence-backed, and mapped to the specific law, jurisdiction, and enforcement precedent that makes it a risk — with the dollar exposure quantified.</p>
+    </div>
+    <div class="step reveal">
+      <div class="idx">04</div>
+      <div class="ic"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 6"/><path d="M3 19h18" opacity=".4"/></svg></div>
+      <h3>You Act Before It Escalates</h3>
+      <p>Get remediation steps prioritized by team and urgency — a board-ready view of exposure you can close before it becomes an investigation, a demand letter, or a class action.</p>
+    </div>
+  </div>
+
+  <div class="blindspot reveal">
+    <div class="left">
+      <h3>Built for the leaders <span class="em">accountable</span> when exposure becomes enforcement.</h3>
+      <p>Your perimeter is hardened. But privacy and compliance exposure sits outside it — publicly visible, continuously scanned by adversaries, and invisible to the tools you already run. Darrow closes that gap.</p>
+      <ul class="signals">
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span>Trackers and pixels firing before consent</li>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span>Sensitive data reaching ad platforms at checkout</li>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span>Session recording without adequate disclosure</li>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span>Practices that conflict with your own privacy policy</li>
+      </ul>
+    </div>
+    <div class="right">
+      <div class="quote">"For the first time, I could show the board exactly what external legal exposure looked like — scored, evidenced, and mapped to real enforcement outcomes."</div>
+      <div class="attr">CISO<span>Fortune 500 Healthcare Organization</span></div>
+      <div class="mini-stats">
+        <div class="ms"><div class="n">6</div><div class="l">exposures, one domain</div></div>
+        <div class="ms"><div class="n">$30M</div><div class="l">in mapped exposure</div></div>
+        <div class="ms"><div class="n">&lt;5 min</div><div class="l">to first findings</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="how-cta reveal">
+    <a href="#pricing">Run Your First Scan
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m0 0l-6-6m6 6l-6 6"/></svg></a>
+  </div>
+</section>
+
+<footer class="wrap">
+  <div class="legal">© 2026 Darrow Inc. · Legal Exposure Management</div>
+</footer>
+
+<script>
+  const io=new IntersectionObserver((ent)=>{
+    ent.forEach((e)=>{if(e.isIntersecting){
+      const sibs=e.target.parentNode?e.target.parentNode.children:[];
+      const idx=Array.prototype.indexOf.call(sibs,e.target);
+      setTimeout(()=>e.target.classList.add('in'), Math.min(idx,5)*80);
+      io.unobserve(e.target);
+    }});
+  },{threshold:.12,rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  document.querySelectorAll('header .reveal').forEach((el,i)=>setTimeout(()=>el.classList.add('in'),120+i*110));
+</script>
+</body>
+</html>
